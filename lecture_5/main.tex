@@ -600,9 +600,9 @@ where $k$ is the radial distortion factor that differs in different cameras and 
 Although this algorithm is efficient, there are many more sophisticated tools which we will not address.
 
 \section{Measuring Depth}
-Now, once we know our parameters $K,R,t$, can we find out the corresponding coordinates in the real world if $p$ on our image plane is known?
+Now, once we know our parameters $K,R,\textbf{t}$, can we find out the corresponding coordinates in the real world if $p$ on our image plane is known?
 
-Unfortunately, the answer is no. That's because the equation $p^h=K[R t]P_W^h$ is not revertible. We still need to decide an extra variable in the 3D world - the depth of $P$, $Z_W$. The only thing we are sure now is that P lies along the line connecting $O$ and $p$.
+Unfortunately, the answer is no. That's because the equation $p^h=K[R\tab \textbf{t}]P_W^h$ is not invertible. We still need to decide an extra variable in the 3D world - the depth of $P$, $Z_W$. The only thing we are sure now is that P lies along the line connecting $O$ and $p$.
 
 \begin{figure}[H]
 \includegraphics[width=0.3\textwidth]{measuring_depth.png}
@@ -612,7 +612,7 @@ Unfortunately, the answer is no. That's because the equation $p^h=K[R t]P_W^h$ i
 \end{figure}
 
 \section{Recovering Structure}
-The previous discussion tells us that we can not simply determine the depth/structure from the pixel coordinates and camera parameters. We see this effect when we look at the picture below. We only know the man is not really stepping on the tower because of our own contextual clues or experience, not from the picture itself.
+The previous discussion tells us that we can not simply determine the depth/structure from a single image using the pixel coordinates and camera parameters. We see this effect when we look at the picture below. We only know the man is not really stepping on the tower because of our own contextual clues or experience, not from the picture itself. Furthermore, binocular vision allows humans to perceive depth, which places limitations on vision systems with a single camera.
 
 \begin{figure}[H]
 \includegraphics[width=0.3\textwidth]{stepping_on_tower.png}
