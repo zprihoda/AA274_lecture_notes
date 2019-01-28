@@ -68,14 +68,14 @@
 
 %%%%%%% Beginning of Vik's Section
 \section{Introduction}
-This lecture is on camera models and camera calibration. More specifically, we want to learn:
+This lecture is on camera models and camera calibration. More specifically, we hope to learn:
 \begin{itemize}
   \item What a camera model is, and how to use it.
   \item How to calibrate a camera.
   \item Other challenges in image processing.
 \end{itemize}
 
-\section{Introduction to computer vision and cameras}
+\subsection{Introduction to computer vision and cameras}
 Whereas most sensors require contact or an active signal to interact with their environment, vision sensors simply capture light rays that are already emitted by the environment. Vision is thus a powerful sensing method that can be defined as: the ability to interpret the surrounding environment using light in the visible spectrum reflected by objects in the environment. The most familiar vision sensor, the human eye, is an incredible example of a vision sensor because it captures an enormous amount of information on the order of millions of bits of information per second.
 
 \subsubsection{History of cameras}
@@ -139,17 +139,17 @@ With this more complete camera model, we can discuss the tradeoffs involved in m
 
 
 \section{Perspective Projection}
-Our goal is \textbf{to determine how points in the world map to points in our camera image}. We start with an assumption of the pinhole camera model (note that all following results also hold when the thin lens model is assumed if we set the camera to be focused at $\infty$ ).
+Our goal is \textbf{to determine how points in the world map to points in our camera image}. We assume the pinhole camera model. It should be noted that the following results will also hold with the thin lens model, if we set the camera to be focused at $\infty$ ).
 
 \begin{figure}[H]
 \includegraphics[width=0.4\textwidth]{diagram_1_vik.png}
 \centering
-\caption{Recall the pinhole camera model discussed in the previous lecture. Our goal is transform coordinates in the world frame $O_w$ to coordinates in the Image Plane. }
+\caption{Our goal is transform coordinates in the world frame $O_w$ to coordinates in the Image Plane. }
 \label{fig:pinhole_cam}
 \end{figure}
 
 \textbf{Step 1}\\\\
-First, we aim to map our point $P_c$ in the camera frame to a point \textit{p} = (\textit{x}, \textit{y}). Recall from the previous lecture:
+First, we aim to map our point in the camera frame $P_c-(X_c, Y_c, Z_c)$ to a point in the image plane $p=(x,y)$. Recall from the early section:
 
 \begin{center}
 \begin{equation}
@@ -184,7 +184,7 @@ Given this coordinate translation, it's evident that our old point can be repres
 \end{center}
 
 \textbf{Step 2.b}\\\\
-Another issue we must account for is that the ratio of image coordinates to actual pixels is likely not one-to-one. In other words, a shift of one unit in our image plane may correspond to a shift of multiple pixels. Consequently, we introduce $k_x$ and $k_y$ which represent the number of pixels per unit distance in the x and y direction respectively. Although it's certainly possible that $k_x = k_y$, typically this will not be the case if the camera pixels are not square. From this intuition, it follows that...
+Another issue we must account for is converting image coordinates to pixel coordinates. For example, a shift of one unit in our image plane may correspond to a shift of multiple pixels. Consequently, we introduce $k_x$ and $k_y$ which represent the number of pixels per unit distance in the image coordinates in the $x$ and $y$ directions respectively. It follows that:
 
 \begin{center}
 \begin{equation}
@@ -196,20 +196,20 @@ Another issue we must account for is that the ratio of image coordinates to actu
 \end{equation}
 \end{center}
 
-We can simplify our result by renaming the following expressions...
+We can simplify our result by renaming the following expressions:
 \begin{center}
 \begin{tabular}{c}
-$k_xf = \alpha$\\
+$\alpha = k_xf$\\
 \\
-$k_yf = \beta$\\
+$\beta = k_yf$\\
 \\
-$k_x\tilde{x}_0 = u_0$\\
+$u_0 = k_x\tilde{x}_0$\\
 \\
-$k_y\tilde{y}_0 = v_0$
+$v_0 = k_y\tilde{y}_0$
 \end{tabular}
 \end{center}
 
-Giving us a final result of ...
+Giving us a final result of:
 
 \begin{center}
 \begin{equation}
@@ -282,7 +282,7 @@ z/w
 \end{pmatrix}
 $
 \end{center}
-Note that as we continue to use homogeneous coordinates, we might signal that a specific coordinate matrix is in homogeneous form by using a superscript $h$ (e.g. $P^h$)
+Note that as we continue to use homogeneous coordinates, we might signal that a specific coordinate matrix is homogeneous by using a superscript $h$ (e.g. $P^h$)
 
 
 
