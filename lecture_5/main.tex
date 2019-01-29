@@ -139,27 +139,29 @@ With this more complete camera model, we can discuss the tradeoffs involved in m
 
 
 \section{Perspective Projection}
-Our goal is \textbf{to determine how points in the world map to points in our camera image}. We assume the pinhole camera model. It should be noted that the following results will also hold with the thin lens model, if we set the camera to be focused at $\infty$ ).
+Our goal is \textbf{to determine how points in the world map to points in our camera image}. We start with an assumption of the pinhole camera model (note that all following results also hold when the thin lens model is assumed if we set the camera to be focused at $\infty$ ).
 
 \begin{figure}[H]
 \includegraphics[width=0.4\textwidth]{diagram_1_vik.png}
 \centering
-\caption{Our goal is transform coordinates in the world frame $O_w$ to coordinates in the Image Plane. }
+\caption{Recall the pinhole camera model discussed in the previous lecture. Our goal is transform coordinates in the world frame $O_w$ to coordinates in the Image Plane. }
 \label{fig:pinhole_cam}
 \end{figure}
 
 \textbf{Step 1}\\\\
-First, we aim to map our point in the camera frame $P_c-(X_c, Y_c, Z_c)$ to a point in the image plane $p=(x,y)$. Recall from the early section:
+First, we aim to map our point $P_c$ in the camera frame to a point \textit{p} = (\textit{x}, \textit{y}) in the image plane. Recall from the previous lecture:
 
 \begin{center}
 \begin{equation}
 \begin{tabular}{c}
-  $x = f\frac{X_C}{X_C}$\\
+  $x = f\frac{X_C}{Z_C}$\\
   \\
-  $y = f\frac{Y_C}{X_C}$
+  $y = f\frac{Y_C}{Z_C}$
 \end{tabular}
 \end{equation}
 \end{center}
+
+Note position of the point in the camera frame, $P_C = [X_C,  Y_C,  Z_c]^T$.
 
 \textbf{Step 2.a}\\\\
 Now, we must recognize that the actual origin of a camera coordinate system is not centered on the image plane, but rather usually in the lower right or lower left corner. This is typically done so as to avoid the need for negative coordinates (and consequently, negative array indices) when accessing a specific point on the image plane, which is typically represented as a grid or series of arrays in software.
@@ -184,7 +186,7 @@ Given this coordinate translation, it's evident that our old point can be repres
 \end{center}
 
 \textbf{Step 2.b}\\\\
-Another issue we must account for is converting image coordinates to pixel coordinates. For example, a shift of one unit in our image plane may correspond to a shift of multiple pixels. Consequently, we introduce $k_x$ and $k_y$ which represent the number of pixels per unit distance in the image coordinates in the $x$ and $y$ directions respectively. It follows that:
+Another issue we must account for is that the ratio of image coordinates to actual pixels is likely not one-to-one. In other words, a shift of one unit in our image plane may correspond to a shift of multiple pixels. Consequently, we introduce $k_x$ and $k_y$ which represent the number of pixels per unit distance in the x and y direction respectively. Although it's certainly possible that $k_x = k_y$, typically this will not be the case if the camera pixels are not square. From this intuition, it follows that:
 
 \begin{center}
 \begin{equation}
@@ -199,13 +201,13 @@ Another issue we must account for is converting image coordinates to pixel coord
 We can simplify our result by renaming the following expressions:
 \begin{center}
 \begin{tabular}{c}
-$\alpha = k_xf$\\
+$k_xf = \alpha$\\
 \\
-$\beta = k_yf$\\
+$k_yf = \beta$\\
 \\
-$u_0 = k_x\tilde{x}_0$\\
+$k_x\tilde{x}_0 = u_0$\\
 \\
-$v_0 = k_y\tilde{y}_0$
+$k_y\tilde{y}_0 = v_0$
 \end{tabular}
 \end{center}
 
@@ -222,7 +224,9 @@ Giving us a final result of:
 \end{center}
 
 \textbf{Homogeneous Coordinates}\\\\
-We now note that our transformations from camera frame to pixel value are, unfortunately, not linear. If we can represent these transformations as a linear mapping, we will be able to greatly simplify our math later on. Thus, we introduce the idea of homogeneous coordinates. Broadly defined, the homogeneous coordinates ($x_1$, $x_2$, $x_3$) for a point ($x$, $y$) are any three points such that $\frac{x_1}{x_3} = x$ and $\frac{x_2}{x_3} = y$.\\\\ Consequently, we use the following rules to transform from inhomogeneous coordinates to homogeneous ones.\\\\
+We now note that our transformations from camera frame to pixel value are, unfortunately, not linear. If we can represent these transformations as a linear mapping, we will be able to greatly simplify our math later on. Thus, we introduce the idea of homogeneous coordinates. For a point ($x$, $y$), the homogeneous coordinates ($x_1$, $x_2$, $x_3$) are defined for any three points such that  $\frac{x_1}{x_3} = x$ and $\frac{x_2}{x_3} = y$. \\\\ Consequently, we use the following rules to transform from inhomogeneous coordinates to homogeneous ones. A two-dimensional position, ($x$,$y$) gains a third dimension while a three-dimensional position, ($x$,$y$,$z$) gains a fourth-dimension as a homogeneous coordinate.\\\\
+
+
 \begin{center}
 $\begin{pmatrix}
 x \\
@@ -252,7 +256,7 @@ z \\
 \end{pmatrix}
 $
 \end{center}
-And we use these rules to transform back from homogeneous coordinates to inhomogeneous ones. \\\\
+Similarly, we use these rules to transform back from homogeneous coordinates to inhomogeneous ones. \\\\
 \begin{center}
 $\lambda\begin{pmatrix}
 x \\
@@ -282,7 +286,7 @@ z/w
 \end{pmatrix}
 $
 \end{center}
-Note that as we continue to use homogeneous coordinates, we might signal that a specific coordinate matrix is homogeneous by using a superscript $h$ (e.g. $P^h$)
+Note that as we continue to use homogeneous coordinates, we might signal that a specific coordinate matrix is in homogeneous form by using a superscript $h$ (e.g. $P^h$).
 
 
 
