@@ -440,6 +440,7 @@ The problem of direct linear calibration is the following: given known correspon
 
 A common method of determining these known correspondences is to use images of a grid with a chessboard like pattern. Such a pattern enables simple extraction of the corners, and identification of relationships between objects in the world frame.
 
+
 %%%%%%%% Beginning of Huajian's Section
 \section{Solving Calibration Problems}
 
@@ -452,111 +453,102 @@ The major idea in camera calibration is that, given some known positions in the 
 \label{fig:calibration}
 \end{figure}
 
-
-First of all, we have the fundamental relationships, relating $p_i^h$, the projected point on the image plane in homogeneous coordinates, and $P_{W,i}^h$ the corresponding point in the world frame in homogeneous coordinates:
+First of all, we have the fundamental relationships, relating $\mathbf{p_i^h} \in \mathbb{R}^{n \times 1}$ (the projected point on the image plane in homogeneous coordinates, and $\mathbf{P_{W,i}^h} \in \mathbb{R}^{n \times 1}$ the corresponding point in the world frame in homogeneous coordinates:
 \begin{equation}
-    p_i^h = M P_{W,i}^{h}\hspace{1mm}, \hspace{3mm}i = 1,....n
+    \mathbf{p_i^h} = M \mathbf{P_{W,i}^{h}}\hspace{1mm}, \hspace{3mm}i = 1,....n
 \end{equation}
 
 where
 \begin{equation}
     M = K [R \hspace{2mm} t]=
 \begin{bmatrix}
-    m_1 \\
-    m_2 \\
-    m_3
+    \mathbf{m_1} \\
+    \mathbf{m_2} \\
+    \mathbf{m_3}
 \end{bmatrix}
 \end{equation}
 
-
-
-
-The process involves feeding in $n$ corresponding pairs of image frame positions and world frame positions, where $i$ is the index of the current pair. The $M$ matrix is size 3 by 4, and each $m_i$ is size 1 by 4. Note that we are working with homogeneous coordinates. We have:
+The process involves feeding in $n$ corresponding pairs of image frame positions and world frame positions, where $i$ is the index of the current pair. Thus, $M \in \mathbb{R}^{3 \times 4}$ with each $\mathbf{m_i} \in \mathbb{R}^{1 \times 4}$. Note that we are working with homogeneous coordinates. We have:
 \begin{equation}
-    p_i^h = [\lambda u \hspace{2mm} \lambda v \hspace{2mm} \lambda]^T
+    \mathbf{p_i^h} = [\lambda u \hspace{2mm} \lambda v \hspace{2mm} \lambda]^T
 \end{equation}
 \begin{equation}
-        P_{W,i}^{h} = [x \hspace{2mm} y \hspace{2mm} z \hspace{2mm} 1]^T
+        \mathbf{P_{W,i}^{h}} = [x \hspace{2mm} y \hspace{2mm} z \hspace{2mm} 1]^T
 \end{equation}
-which conforms with the matrix multiplication rules given $M$ is 3 by 4.\\
 
-
-If we write out the relationships between a pair of $p_i^h$ and $P_{W,i}^h$, we can obtain the following:
+If we write out the relationships between a pair of $\mathbf{p_i^h}$ and $\mathbf{P_{W,i}^h}$, we can obtain the following:
 \begin{equation}
-    \lambda = m_3 \cdot P_{W,i}^h
+    \lambda = \mathbf{m_3} \cdot \mathbf{P_{W,i}^h}
 \end{equation}
 
 \begin{equation}
-    u_i = \frac{\lambda u_i}{\lambda} = \frac{m_1 \cdot P_{W,i}^h}{m_3 \cdot P_{W,i}^h}
+    u_i = \frac{\lambda u_i}{\lambda} = \frac{\mathbf{m_1} \cdot \mathbf{P_{W,i}^h}}{\mathbf{m_3} \cdot \mathbf{P_{W,i}^h}}
 \end{equation}
 \begin{equation}
-    v_i = \frac{\lambda v_i}{\lambda} = \frac{m_2 \cdot P_{W,i}^h}{m_3 \cdot P_{W,i}^h}
+    v_i = \frac{\lambda v_i}{\lambda} = \frac{\mathbf{m_2} \cdot \mathbf{P_{W,i}^h}}{\mathbf{m_3} \cdot \mathbf{P_{W,i}^h}}
 \end{equation}
 
 which can be transformed into the form of two constraint equations:
 \begin{equation}\label{eqn:u_contraint}
-    u_i(m_3 \cdot P_{W,i}^h) - m_1 \cdot P_{W,i}^h = 0
+    u_i(\mathbf{m_3} \cdot \mathbf{P_{W,i}^h}) - \mathbf{m_1} \cdot \mathbf{P_{W,i}^h} = 0
 \end{equation}
 \begin{equation}
-    v_i(m_3 \cdot P_{W,i}^h) - m_2 \cdot P_{W,i}^h = 0
+    v_i(\mathbf{m_3} \cdot \mathbf{P_{W,i}^h}) - \mathbf{m_2} \cdot \mathbf{P_{W,i}^h} = 0
 \end{equation}
 
-Now if we stack all of these (n pairs of these $u_i$ and $v_i$ equations) together, we can obtain a system of equations, and to write them compactly, we can use matrix multiplication:
+Now if we stack all of these ($n$ pairs of $u_i$ and $v_i$ equations) together, we can obtain a system of equations, and to write them compactly, we can use matrix multiplication:
 \begin{equation}
-    \tilde{P}m = 0, \hspace{5mm} m =
+    \tilde{P}\mathbf{m} = 0, \hspace{5mm} \mathbf{m} =
     \begin{bmatrix}
-    m_1^T \\
-    m_2^T \\
-    m_3^T
+    \mathbf{m_1}^T \\
+    \mathbf{m_2}^T \\
+    \mathbf{m_3}^T
 \end{bmatrix}
 \end{equation}
 
 Let's write out a few rows of $\tilde{P}$ that correspond to the $u_i$ and $v_i$ constraints above to make things more concrete:
 
-
 \begin{equation}
 \tilde{P} =
      \begin{bmatrix}
-  -(P_{W,1}^h)^T & 0_{1x4} & u_{1} (P_{W,1}^h)^T \\
-   0_{1x4} & -(P_{W,1}^h)^T &v_{1} (P_{W,1}^h)^T  \\
-  -(P_{W,2}^h)^T & 0_{1x4} & u_{2} (P_{W,2}^h)^T \\
+  -(\mathbf{P_{W,1}^h})^T & \mathbf{0}_{1x4} & u_{1} (\mathbf{P_{W,1}^h})^T \\
+  \mathbf{0}_{1x4} & -(\mathbf{P_{W,1}^h})^T & v_{1} (\mathbf{P_{W,1}^h})^T  \\
+  -(\mathbf{P_{W,2}^h})^T & \mathbf{0}_{1x4} & u_{2} (\mathbf{P_{W,2}^h})^T \\
   \vdots & \vdots & \vdots
  \end{bmatrix}
 \end{equation}
 
+Here, $\tilde{P} \in \mathbb{R}^{2n \times 12}$ and $\mathbf{m} \in \mathbb{R}^{12 \times 1}$.
 
+Now, we ideally want to directly solve this system of equations and obtain the unique set of $m_i$ values, which should allow us to obtain all parameters of the camera. We have 12 parameters to determine (including the scaling parameter for the projection). Potentially, we might want to feed in more pairs of corresponding positions to make this process more robust; however, that would result in more equations than coefficients to solve for, making the system of equations \textit{overdetermined}. \\\\
+Furthermore, due to the uncertainties which arise in obtaining any of these positions data, it's very likely that this system of equations will not be perfectly satisfied. Therefore, we will frame this as a minimization problem where we try to satisfy this system of equations as best as possible, with a non-trivial $\mathbf{m}$ coefficient vector. Note that without the constraint of the square norm of $\mathbf{m}$ beeing equal to 1, the minimization would result in trivial coefficients (all $m_i$'s being zeros).
 
-The size of $\tilde{P}$ is 2n by 12, and the size of $m$ is 12 by 1.
+\begin{align}
+    \underset{\mathbf{m} \in \mathbb{R}^{12}}{\text{min}} \hspace{3mm} \| \tilde{P} \mathbf{m} \|^2 \\
+    \text{subject to } \| \mathbf{m} \|^2 = 1
+\end{align}
 
-
-Now, we ideally want to directly solve this system of equations and obtain the unique set of $m_i$ values, which should allow us to obtain all parameters of the camera. We have 12 parameters to determine (including the scaling parameter for the projection). Potentially, we might want to feed in more pairs of corresponding positions to make this process more robust; however, that would result in more equations than coefficients to solve for, making the problem "over-constrained". \\\\
-Furthermore, due to the uncertainties which arise in obtaining any of these positions data, it's very likely that this system of equations is not perfectly satisfied. Therefore, we will frame this as a minimization problem where we try to satisfy this system of equations as well as possible, with a non-trivial $m$ coefficient vector. Note that, without the constraint of square norm of $m$ equals 1, the minimization would result in trivial coefficients (all $m_i$ being zeros).
+This choice of the norm of $\mathbf{m}$ relies on the fact the a scalar multiple of the solution is still a solution of the original system of equations. Now, let's construct the Lagrangian first, by adding the cost and the Lagrange multiplier times the constraint:
 
 \begin{equation}
-    min_{m\in R^{12}} \hspace{3mm} \| \tilde{P} m \|^2
-\end{equation}
-subject to
-\begin{equation}
-    \| m \|^2 = 1
+    L = \mathbf{m}^T\tilde{P}^T\tilde{P}\mathbf{m} + \lambda(1 - \mathbf{m}^T \mathbf{m})
 \end{equation}
 
-This choice of the norm of $m$ relies on the fact the a scalar multiple of the solution is still a solution of the original system of equations. Now, let's construct the Lagrangian first, by adding the cost and the Lagrange multiplier times the constraint:
-\begin{equation}
-    L = m^T\tilde{P}^T\tilde{P}m + \lambda(1 - m^T m)
-\end{equation}
 We take the gradient and set it to zero as the necessary condition of optimality:
+
 \begin{equation}
-    \nabla L = 2\tilde{P}^T \tilde{P} m - 2\lambda m = 0  \xrightarrow{} \tilde{P}^T \tilde{P} m = \lambda m
+    \nabla L = 2\tilde{P}^T \tilde{P} \mathbf{m} - 2\lambda \mathbf{m} = 0  \xrightarrow{} \tilde{P}^T \tilde{P} \mathbf{m} = \lambda \mathbf{m}
 \end{equation}
 
-Now, it's obvious that the $m$ we are looking for is an eigenvector of the $\tilde{P}^T \tilde{P}$. Furthermore, it is the eigenvector that has the smallest eigenvalue that would minimize the square norm.
+Now, it's obvious that the $\mathbf{m}$ we are looking for is an eigenvector of $\tilde{P}^T \tilde{P}$. Furthermore, it is the eigenvector that has the smallest eigenvalue that would minimize the square norm.
 
+After obtaining the $M$ matrix upon solving the minimization problem, we can factorize $M$ as
 
-After obtaining the $M$ matrix upon solving the minimization problem, we will factorize $M$ as
 \begin{equation}
     M = [KR \hspace{2mm} Kt]
 \end{equation}
-The first 3 columns of the matrix are the product of the intrinsic parameter matrix, which is upper triangular, and the rotation matrix, which is orthogonal. This calls for the efficient RQ factorization method, and we can obtain the parameters from the corresponding entries.
+
+The first 3 columns of the matrix are the product of the intrinsic parameter matrix (which is upper triangular) and the rotation matrix (which is orthogonal). This calls for the efficient $RQ$ factorization method, which allows us to obtain the parameters from the corresponding entries.
 
 
 %%%%%%% Beginning of Zaifeng's Section
