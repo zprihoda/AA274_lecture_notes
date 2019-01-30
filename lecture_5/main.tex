@@ -393,54 +393,54 @@ We are able to express the rigid transformation containing both rotation and tra
 
 \begin{equation}
 \begin{bmatrix}
-P_c \\
+\boldsymbol{P_c} \\
 1
 \end{bmatrix}
 =
 \begin{bmatrix}
-R && t \\
-0_{3x0} && 1
+R && \boldsymbol{t} \\
+0_{3x1} && 1
 \end{bmatrix}
 \begin{bmatrix}
-P_w \\ 1
+\boldsymbol{P_w} \\ 1
 \end{bmatrix}
 \end{equation}
 
 We can combine the transform between a point in the world frame to a point in the camera frame and the transform from a point in the camera frame to a point in the image frame to generate the transform from the the world frame directly to the image frame:
 
- \begin{equation}
-p^h
+\begin{equation}
+\boldsymbol{p^h}
 =
 K \begin{bmatrix}
 I_{3x3} \quad 0_{3x1}
 \end{bmatrix}
 \begin{bmatrix}
-R && t \\
+R && \boldsymbol{t} \\
 0_{3x0} && 1
 \end{bmatrix}
-P_w^h
- \end{equation}
+\boldsymbol{P_w^h}
+\end{equation}
 
- \begin{equation}
- p^h = K[R \quad t] P_W^h.
- \end{equation}
+\begin{equation}
+\boldsymbol{p^h} = K[R \quad \boldsymbol{t}] \boldsymbol{P_W^h}.
+\end{equation}
 
-Here the matrix $K$ is the matrix of intrinsic parameters, and the $[R \quad t]$ matrix contains the extrinsic parameters, which describe the cameras relationship to the points in the photograph. The superscript $h$ means the point is expressed in homogeneous coordinates, meaning that $p^h$ is the $3x1$ homogeneous coordinates matrix of the point in the image frame, and $P_w^h$ is the $4x1$ homogeneous coordinates matrix of the point in the world frame.
+Here the matrix $K \in \mathbb{R}^{3\times3}$ is the matrix of intrinsic parameters, and the $[R \quad \boldsymbol{t}] \in \mathbb{R}^{3\times4}$ matrix contains the extrinsic parameters, which describe the camera's relationship to the points in the photograph. The superscript $h$ means the point is expressed in homogeneous coordinates, meaning that $\boldsymbol{p^h}$ is the $3x1$ homogeneous coordinates matrix of the point in the image frame, and $\boldsymbol{P_w^h}$ is the $4x1$ homogeneous coordinates matrix of the point in the world frame.
 
-The total degrees of freedom for the combined matrices are 5 for $K$, 3 for the rotation matrix $R$ and 3 for the translation $t$, leading to a total of 11 parameters. Note that the rotation matrix $R$ has 3 DOF because rotation of a coordinate frame takes place in three linearly independent planes. If we assume that our skewness $\gamma$ is 0, K has 4 parameters and the total number of degrees of freedom is 10 instead.
+The total degrees of freedom for the combined matrices are 5 for $K$ ($\alpha$, $\beta$, $\gamma$, $u_0$, $v_0$), 3 for the rotation matrix $R$ and 3 for the translation $t$, leading to a total of 11 parameters. Note that the rotation matrix $R$ has 3 DOF because rotation of a coordinate frame takes place in three linearly independent planes. If we assume that our skewness $\gamma$ is 0, K has 4 parameters and the total number of degrees of freedom is 10 instead.
 
 This perspective projection naturally causes several consequences which can be mathematically derived. For example, parallel lines in images appear to meet at the horizon, and objects that are far away appear smaller than their closer counterparts. Both effects are shown in the following image of train tracks.
 
 \begin{figure}[H]
-\includegraphics[width=0.5\textwidth]{traintracks.jpg}
-\centering
-\caption{An image of train tracks. Note that the parallel tracks appear to meet at the horizon. The wooden railroad ties (perpendicular to the tracks) are all the same size, but those further from the camera appear smaller than the closer railroad ties. }
-\label{fig:train_tracks}
+	\includegraphics[width=0.5\textwidth]{traintracks.jpg}
+	\centering
+	\caption{An image of train tracks. Note that the parallel tracks appear to meet at the horizon. The wooden railroad ties (perpendicular to the tracks) are all the same size, but those further from the camera appear smaller than the closer railroad ties. }
+	\label{fig:train_tracks}
 \end{figure}
 
 
 \subsection{Direct Linear Calibration}
-The problem of direct linear calibration is the following: given known correspondences between known points in the camera frame $(p_i)$ and known points in the world frame $P_{W,i}$, determine the intrinsic parameters $(K)$ and the extrinsic parameters $(R,t)$ of the camera.
+The problem of direct linear calibration is the following: given known correspondences between known points in the camera frame $(\boldsymbol{p_i})$ and known points in the world frame $\boldsymbol{P_{W,i}}$, determine the intrinsic parameters $(K)$ and the extrinsic parameters $(R,\boldsymbol{t})$ of the camera.
 
 A common method of determining these known correspondences is to use images of a grid with a chessboard like pattern. Such a pattern enables simple extraction of the corners, and identification of relationships between objects in the world frame.
 
