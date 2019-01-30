@@ -591,7 +591,7 @@ There are many algorithms that address image distortion. A simple and efficient 
 \end{bmatrix}
 \end{equation}
 
-where $k$ is the radial distortion factor that differs in different cameras and needs to be pre-calculated. $r^2=(u-u_{cd})^2+(v-v_{cd})^2$ is the square of the distance between the ideal pixel location and the center of distortion. $(u_{cd},v_{cd})$ are the coordinates of the image center.
+where $k \in \mathbb{R}$ is the radial distortion factor that differs in different cameras and needs to be pre-calculated. $r^2=(u-u_{cd})^2+(v-v_{cd})^2$ is the square of the distance between the ideal pixel location and the center of distortion. $(u_{cd},v_{cd})$ are the coordinates of the image center.
 
 Although this algorithm is efficient, there are many more sophisticated tools which we will not address.
 
