@@ -323,7 +323,7 @@ $
 is our pixel $P_C$ in homogeneous coordinates; we will ultimately map these coordinates to $P_W$ or world coordinates.
 The preceding 3x4 matrix is called $K$, and is alternatively referred to as the camera matrix or matrix of intrinsic parameters. $K$ contains the fundamental characteristics of our given pinhole camera. Although we may have access to these values from the manufacturer specs, we often have to re-calibrate the camera to account for differences in tolerances or noise.
 
-The $K$ depicted in the above equation is typically standard. However, in some rare cases, the Image Plane coordinate axes may not be perpendicular, forcing us to introduce another variable, $\gamma$, representing this skew parameter Typically, we treat $\gamma$ as 0.
+The $K$ depicted in the above equation is typically standard. However, in some rare cases, the Image Plane coordinate axes may not be perpendicular, forcing us to introduce another variable, $\gamma$, representing this skew parameter. Typically, we treat $\gamma$ as 0.
 \begin{equation}
 K =
 \begin{bmatrix}
@@ -575,10 +575,6 @@ There are many algorithms that address image distortion. A simple and efficient 
     v_d
 \end{bmatrix}
 =
-\begin{bmatrix}
-    u_d \\
-    v_d
-\end{bmatrix}
 (1+kr^2)
 \begin{bmatrix}
     u-u_{cd} \\
